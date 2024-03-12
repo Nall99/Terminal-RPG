@@ -16,7 +16,7 @@ class Player:
     xp: int = 0
     level: int = 1
     points: int = 7
-    inventory: dict = {}
+    inventory: dict = dict
 
     def attack(self):
         pass
@@ -26,7 +26,8 @@ class Player:
         pass
     def see_attribute(self):
         pass
-    def set_attribute(self, att, value):
+    
+    def set_attribute(self):
          while self.points > 0:
             print(f"{self.nick:-^25}")
             print(f"You has {self.points} points")
@@ -40,7 +41,6 @@ class Player:
             att = int(input("Select an attribute: "))
             value = int(input("Enter the value of the attribute: "))
     
-
     def set_strength(self, value):
         self.strength = value
     def get_strength(self):

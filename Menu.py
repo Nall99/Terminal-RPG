@@ -18,10 +18,11 @@ def exibir():
     return switch.get(op, default)()
 
 def new_game():
+    os.system("cls")
     nick = input("Digite seu Nick:\n")
     pl = Player(nick)
     os.system("cls")
-
+    pl.set_attribute()
 
 
 
