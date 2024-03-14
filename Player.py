@@ -1,4 +1,7 @@
+from Saves import db
 from dataclasses import dataclass
+from time import sleep as delay
+import os
 
 @dataclass
 class Player:
@@ -18,17 +21,23 @@ class Player:
     points: int = 7
     inventory: dict = dict
 
+    if os.path.exists("Saves/saves.db") == False:
+        db.first_save()
+        print("criando save...")
+        delay(5)
+
     def attack(self):
         pass
     def defense(self):
         pass
-    def see_inventory(self):
+    def get_inventory(self):
         pass
-    def see_attribute(self):
+    def get_attribute(self):
         pass
     
     def set_attribute(self):
-         while self.points > 0:
+        while self.points > 0:
+            os.system("cls")
             print(f"{self.nick:-^25}")
             print(f"You has {self.points} points")
             print('-'*25)
@@ -38,8 +47,34 @@ class Player:
             print("3 - Armor")
             print("4 - Ability")
             print("5 - Power")
-            att = int(input("Select an attribute: "))
+            att = input("Select an attribute: ")
             value = int(input("Enter the value of the attribute: "))
+            switch = {
+                "1": self.set_strength,
+                "2": self.set_resistance,
+                "3": self.set_armor,
+                "4": self.set_ability,
+                "5": self.set_power 
+            }
+            try:
+                switch.get(att)(value)
+                self.points -= value
+            except TypeError:
+                print("ERRO!!!")
+                print("Wait a moment and try again...")
+                delay(3)
+        db.saving((self.nick, 
+                   self.strength, 
+                   self.resistance, 
+                   self.armor, 
+                   self.ability, 
+                   self.power, 
+                   self.life, 
+                   self.mana, 
+                   self.xp, 
+                   self.level, 
+                   self.points))
+
     
     def set_strength(self, value):
         self.strength = value
