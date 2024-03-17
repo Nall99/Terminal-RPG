@@ -1,11 +1,11 @@
-from Saves import db
 from dataclasses import dataclass
-from time import sleep as delay
 import os
+import Save
 
 @dataclass
 class Player:
-    nick: str
+    id: int = 0
+    nick: str = ''
     
     strength: int = 0
     armor: int = 0
@@ -14,41 +14,33 @@ class Player:
     power: int = 0
     
     life: int = 0
+    max_life: int = life
     mana: int = 0
+    coins: int = 10
+
 
     xp: int = 0
     level: int = 1
     points: int = 7
     inventory: dict = dict
 
-    if os.path.exists("Saves/saves.db") == False:
-        db.first_save()
-        print("criando save...")
-        delay(5)
-
-    def attack(self):
-        pass
-    def defense(self):
-        pass
-    def get_inventory(self):
-        pass
-    def get_attribute(self):
-        pass
-    
-    def set_attribute(self):
+    def level_up(self):
+        # Distributing points
         while self.points > 0:
             os.system("cls")
             print(f"{self.nick:-^25}")
-            print(f"You has {self.points} points")
+            print(f"You has {self.points} points") # Number of free points
             print('-'*25)
-            print("distributed their points")
-            print("1 - Strength")
-            print("2 - Resistance")
-            print("3 - Armor")
-            print("4 - Ability")
-            print("5 - Power")
+            print("Distributed their points")
+            print(f"1 - Strength     | {self.strength}")   # Strength points
+            print(f"2 - Resistance   | {self.resistance}") # Resistance points
+            print(f"3 - Armor        | {self.armor}")      # Armos points
+            print(f"4 - Ability      | {self.ability}")    # Ability points
+            print(f"5 - Power        | {self.power}")      # Power points
             att = input("Select an attribute: ")
             value = int(input("Enter the value of the attribute: "))
+            # Since python doesn't have a switch function, I did 
+            # something similar using dict
             switch = {
                 "1": self.set_strength,
                 "2": self.set_resistance,
@@ -58,23 +50,48 @@ class Player:
             }
             try:
                 switch.get(att)(value)
-                self.points -= value
+                if value > 0:
+                    self.points -= value
+                elif value < 0:
+                    self.points += value
             except TypeError:
                 print("ERRO!!!")
                 print("Wait a moment and try again...")
-                delay(3)
-        db.saving((self.nick, 
-                   self.strength, 
-                   self.resistance, 
-                   self.armor, 
-                   self.ability, 
-                   self.power, 
-                   self.life, 
-                   self.mana, 
-                   self.xp, 
-                   self.level, 
-                   self.points))
+                
+        
+        if self.resistance <= 0:
+            self.life = self.mana = 5
+        else:
+            self.life = self.mana = self.resistance * 5
 
+    if xp in (30, 60, 90, 120, 150, 180, 210, 240, 270, 300):
+        level += 1
+        level_up()
+
+    def attack(self):
+        return self.strength + self.ability
+    def defense(self):
+        return self.armor + self.ability
+    
+    def get_inventory(self):
+        pass
+    def look_status(self):
+        os.system("cls")
+        print(f"{self.nick:-^20}")
+        print(f"Life       | {self.life}")
+        print(f"Mana       | {self.mana}")
+        print(f"Level      | {self.level}")
+        print(f"Coins      | {self.coins}")
+        print("-"*20)
+        print(f"Strength   | {self.strength}")
+        print(f"Armor      | {self.armor}")
+        print(f"Ability    | {self.ability}")
+        print(f"Power      | {self.power}")
+        print(f"Resistance | {self.resistance}")
+        print()
+    
+    def get_id(self):
+        return id
     
     def set_strength(self, value):
         self.strength = value

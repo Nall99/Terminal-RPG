@@ -1,7 +1,8 @@
 from time import sleep as delay
-from Player import Player
 import os
-def exibir():
+
+# In Home
+def HomeMenuDisplay():
     os.system('cls')
     print("--------TERMINAL RPG --------")
     switch = {
@@ -15,24 +16,50 @@ def exibir():
     print("3 - Guide")
     print("4 - Quit")
     op = input("Choose an option: ")
+    os.system("cls")
     return switch.get(op, default)()
 
+# Home Menu Switch: 
 def new_game():
-    os.system("cls")
-    nick = input("Digite seu Nick:\n")
-    pl = Player(nick)
-    pl.set_attribute()
-
-
-
+    return 1
 def loading():
-    pass
+    return 2
 def guide():
-    pass
+    return 3
 def quit():
-    pass
+    return 4
 def default():
     print("Opção inválida!!!")
     print("Aguarde um pouco e digite novamente uma opção")
     delay(3)
-    return -1
+    HomeMenuDisplay()
+
+# In Game
+def GameMenuDisplay():
+    print("--------TERMINAL RPG --------")
+    switch = {
+        "1": walk,
+        "2": player,
+        "3": save_game,
+        "4": bestiary,
+        "5": guide,
+        "6": quit
+    }
+    print("1 - Walk")
+    print("2 - Player")
+    print("3 - Save Game")
+    print("4 - Bestiary")
+    print("5 - Guide")
+    print("6 - Quit")
+    op = input("Choose an option: ")
+    os.system("cls")
+    return switch.get(op, default)()
+# Game Menu Switch:
+def walk():
+    return 1
+def player():
+    pass
+def save_game():
+    pass
+def bestiary():
+    pass
